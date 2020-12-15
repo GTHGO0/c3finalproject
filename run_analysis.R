@@ -1,7 +1,7 @@
 ## **FINAL PROJECT R- COURSE 3**
 ##  CLEANING AND WORKING WITH DATA
 
-Here are the data for the project:
+Here is the data for the project:
   
   https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
@@ -16,7 +16,7 @@ You should create one R script called run_analysis.R that does the following.
     with the average of each variable for each activity and each subject.
 
 setwd("~/") # default working directory
-setwd("R/C3-GCD//PRJ") # using absolute reference
+setwd("R/C3-GCD/c3finalproject/") # using absolute reference
 
 library(httr)
 url <- ("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip")
@@ -78,21 +78,21 @@ length(grep("mean()",names(FullDataSet), value = TRUE))
 #   Subset the data only with columns containing "Mean" & "Std"
 #   using grep function I got the number of columns containing "Mean or STD"
 
-grep("mean|std",names(FullDataSet), value = TRUE)
-length(grep("mean|std",names(FullDataSet), value = TRUE))
-ncolumns <- grep("mean|std",names(FullDataSet))
+grep("mean|std", names(FullDataSet), value = TRUE)
+length(grep("mean|std", names(FullDataSet), value = TRUE))
+ncolumns <- grep("mean|std", names(FullDataSet))
 
 #   using dplyr we extract the data with Select
 library(dplyr)
-ExtractedDF <- select(FullDataSet, 1:2, ncolumns)
-View(ExtractedDF)
+DataSubset <- select(FullDataSet, 1:2, ncolumns)
+View(DataSubset)
 
 #   Another step to delete columns with names "MeanFreq" (not required)
 
-grep("meanFreq",names(ExtractedDF), value = TRUE)
+grep("meanFreq",names(DataSubset), value = TRUE)
 
-ExtractedDF <- select(ExtractedDF, -(grep("meanFreq",names(ExtractedDF), value = TRUE)))
-View(ExtractedDF)
+DataSubset <- select(DataSubset, -(grep("meanFreq",names(DataSubset), value = TRUE)))
+View(DataSubset)
 
 
 ##  3.  Use descriptive activity names to re-name the activities
@@ -100,82 +100,26 @@ View(ExtractedDF)
 
 names(activityLabels) <- c("activity", "actvity_name")
 
-
-### some practice before find the best form to assign the activity names to the
-### column "activity" in the "ExtractedDF"
-
-df1 <- tibble(x = 1:3)
-> df2 <- tibble(x = c(1, 1, 2), y = c("first", "second", "third"))
-> df1
-# A tibble: 3 x 1
-x
-<int>
-  1     1
-2     2
-3     3
-> df2
-# A tibble: 3 x 2
-x y     
-<dbl> <chr> 
-  1     1 first 
-2     1 second
-3     2 third 
-> df1 %>% left_join(df2)
-Joining, by = "x"
-# A tibble: 4 x 2
-x y     
-<dbl> <chr> 
-  1     1 first 
-2     1 second
-3     2 third 
-4     3 NA    
-> df1 %>% left_join(activityLabels)
-Error: `by` must be supplied when `x` and `y` have no common variables.
-i use by = character()` to perform a cross-join.
-Run `rlang::last_error()` to see where the error occurred.
-> df1 %>% left_join(activityLabels, by = "activity")
-Error: Join columns must be present in data.
-x Problem with `activity`.
-Run `rlang::last_error()` to see where the error occurred.
-> df1 %>% left_join(activityLabels, by = c("x" = "activity"))
-# A tibble: 3 x 2
-x actvity_name      
-<int> <chr>             
-  1     1 WALKING           
-2     2 WALKING_UPSTAIRS  
-3     3 WALKING_DOWNSTAIRS
-
-## this is a good option to joint "activitylabels" and "ExtractedDF"
-## using dplyr function "left_join()"
-
-> ExtractedDF %>% left_join(activityLabels, by = c("activity" = "activity"))
-
-##############################################################################
-
 ## now creating a simple list of the activity names.
 
 lbs2<- activityLabels[,2]
 
-> lbs2
-[1] "WALKING"            "WALKING_UPSTAIRS"   "WALKING_DOWNSTAIRS" "SITTING"           
-[5] "STANDING"           "LAYING"  
-
 ## doing an assignment of the labels based on the order of rows in "lbs2"
-## the assignment is done in "ExtractedDF" as follows:
+## the assignment is done in "DataSubset" as follows:
 
-ExtractedDF$activity <- lbs2[ExtractedDF$activity]
-View(ExtractedDF)
+DataSubset$activity <- lbs2[DataSubset$activity]
+View(DataSubset)
 
 
 ##  4.  Appropriately label the data set with descriptive variable names.
 
-names(ExtractedDF) # there are 68 labels
+names(DataSubset) # there are 68 labels
 
 ##  I replace everything with "-mean().*" and wathever comes after
 ##  then with gsub it is replaced by nothin ("")
 ##  then I extract the unique names of the previous operation, except 1:2 cols
 
-unique(gsub("-(mean|std)().*", "", names(ExtractedDF)[-c(1:2)]))
+unique(gsub("-(mean|std)().*", "", names(DataSubset)[-c(1:2)]))
 [1] "tBodyAcc"             "tGravityAcc"          "tBodyAccJerk"        
 [4] "tBodyGyro"            "tBodyGyroJerk"        "tBodyAccMag"         
 [7] "tGravityAccMag"       "tBodyAccJerkMag"      "tBodyGyroMag"        
@@ -191,22 +135,26 @@ unique(gsub("-(mean|std)().*", "", names(ExtractedDF)[-c(1:2)]))
 # "BodyBody" replaced by Body
 
  
-names(ExtractedDF)[-c(1:2)] <- gsub("^t", "time", names(ExtractedDF)[-c(1:2)])
-names(ExtractedDF)[-c(1:2)] <- gsub("^f", "frequency", names(ExtractedDF)[-c(1:2)])
-names(ExtractedDF)[-c(1:2)] <- gsub("Acc", "Accelerometer", names(ExtractedDF)[-c(1:2)])
-names(ExtractedDF)[-c(1:2)] <- gsub("Gyro", "Gyroscope", names(ExtractedDF)[-c(1:2)])
-names(ExtractedDF)[-c(1:2)] <- gsub("Mag", "Magnitude", names(ExtractedDF)[-c(1:2)])
-names(ExtractedDF)[-c(1:2)] <- gsub("BodyBody", "Body", names(ExtractedDF)[-c(1:2)])
+names(DataSubset)[-c(1:2)] <- gsub("^t", "time", names(DataSubset)[-c(1:2)])
+names(DataSubset)[-c(1:2)] <- gsub("^f", "frequency", names(DataSubset)[-c(1:2)])
+names(DataSubset)[-c(1:2)] <- gsub("Acc", "Accelerometer", names(DataSubset)[-c(1:2)])
+names(DataSubset)[-c(1:2)] <- gsub("Gyro", "Gyroscope", names(DataSubset)[-c(1:2)])
+names(DataSubset)[-c(1:2)] <- gsub("Mag", "Magnitude", names(DataSubset)[-c(1:2)])
+names(DataSubset)[-c(1:2)] <- gsub("BodyBody", "Body", names(DataSubset)[-c(1:2)])
 
-names(ExtractedDF)
+names(DataSubset)
 
 
 ##  5.  From the data set in step 4, creates a second, independent tidy data set
 ##      with the average of each variable for each activity and each subject.
 
-TidyData <- aggregate(.~subject+activity, ExtractedDF, mean)
+TidyData <- aggregate(.~subject+activity, DataSubset, mean)
 
+## write the results to a text file
+write.table(TidyData, file = "tidydata.txt", row.names = FALSE)
 
-
+## how to read the file.
+newfile <- read.table("tidydata.txt", header= TRUE)
+View(newfile)
 
 
