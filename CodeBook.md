@@ -4,6 +4,7 @@ author: "Hans Gonzalez"
 date: "14/12/2020"
 output: html_document
 ---
+# CODEBOOK: "tidydata.txt"
 
 Feature Description
 ====================
@@ -16,8 +17,8 @@ Subsequently, the body linear acceleration and angular velocity were derived in 
 
 Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). 
 
-Pattern Description
-====================
+Variable Pattern Description
+============================
 
 These signals were used to estimate variables of the feature vector for each pattern:
 
@@ -54,7 +55,7 @@ Notes:
 	5. Each column [3:68] represents the average of each observation in the dataset after being grouped by subject/activity. 
 
 
-**A list of the variables is provided as follows:**
+**A list of the variables contained in "tidydata.txt" is provided as follows:**
 
 **[No.] "VARIABLE" = DESCRIPTION**
 
