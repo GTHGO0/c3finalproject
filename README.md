@@ -11,10 +11,10 @@ Content:
     * [Data Project Overview](#dtprjoverview)
     * [About the Data Set](#dataset)
     * [Repository Contents](#contents)
-* [2. Course Project Instructions](#)
-    * [Instructions](#)
-    * [Steps in the Script](#)
-    * [Reading the output file](#)
+* [2. Course Project Instructions](#instructions)
+    * [Instructions](instructions#)
+    * [Steps in the Script](#steps)
+    * [Reading the output file](#reading)
 
 <h1 id="overview">1. Overview</h1>
 This repository contains the results of the final project assignment in the Course: Getting and Cleaning Data with R. 
@@ -87,21 +87,21 @@ Participants must develop an R script called run_analysis.R that:
 
 <h2 id="steps">Steps in the Script</h2>
 
-  1. Download the data file from the source.
-  2. Upload the data into R.
-  3. Identify and analyze the data previous to merge files
-  4. Create independent "Training" and "Test" data sets.
-  5. Apply the labels to the previous data sets. (features.txt)
+  1. Downloading the data file from the source.
+  2. Uploading the data into R.
+  3. Identify and analyze the data previous to merging files
+  4. Create an independent "Training" and "Test" data set.
+  5. Apply Labels to the previous data sets. (features.txt)
   6. Merge both "Training and Test" data sets.
-  7. Shape properly the data in the "activity" column
-  8. Identify the columns with ambiguous variable names to be named properly.
-  9. Rename the variable names.
- 10. Subset the data by Subject and Activity, with the average of each variable.
- 11. Store in an independent output file the result of the previous steps.
+  7. Extract only the mean and stdev. from the file.
+  8. Use descriptive names in the "activity column" data.
+  9. Appropriately rename the variable names in the file.
+ 10. Group the data by Subject and Activity, with the average of each variable.
+ 11. Store in an independent output file the results from previous steps.
 
 <h2 id="reading">Reading the output data file</h2>
 
-The follow code is provided to read properly the output file in R:
+The following code is provided in order to read properly the output file in R:
 
 {..r..
 newfile <- read.table("tidydata.txt", header= TRUE)
